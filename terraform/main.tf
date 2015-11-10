@@ -20,13 +20,6 @@ resource "atlas_artifact" "nodejs" {
   lifecycle { create_before_destroy = true }
 }
 
-resource "atlas_artifact" "consul" {
-  name = "kfishner/consul"
-  type = "aws.ami"
-
-  lifecycle { create_before_destroy = true }
-}
-
 // TEMPLATES
 resource "template_file" "consul_upstart" {
   filename = "files/consul.sh"
@@ -222,7 +215,7 @@ resource "aws_security_group" "consul" {
 
 //Consul Instance
 resource "aws_instance" "consul" {
-  ami             = "${atlas_artifact.consul.metadata_full.region-us-east-1}"
+  ami             = "ami-a909abc2"
   user_data       = "${template_file.consul_upstart.rendered}"
   instance_type   = "t2.micro"
   key_name        = "${module.ssh_keys.key_name}"
